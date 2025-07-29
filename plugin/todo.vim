@@ -14,8 +14,33 @@ def Todo(...dirs: list<string>)
     return
   endif
 
-  call setqflist([], 'r', {lines: output, title: 'TODOs'})
+  var qfl = ParseGrepOutputToQF(output)
+  call setqflist([], 'r', {items: qfl, title: 'TODOs'})
   copen
+enddef
+
+def ParseGrepOutputToQF(lines: list<string>): list<any>
+  var qflist = []
+
+  for line in lines
+    var parts = split(line, ':', v:true)
+    if len(parts) < 3
+      continue
+    endif
+
+    var filename = parts[0]
+    var lnum = str2nr(parts[1])
+
+    var entry = {
+      'filename': filename,
+      'lnum': lnum,
+      'text': parts[2],
+    }
+
+    call add(qflist, entry)
+  endfor
+
+  return qflist
 enddef
 
 def GetDirNotInGitignore(): list<string>
@@ -41,4 +66,3 @@ def GetDirNotInGitignore(): list<string>
 
   return keys(tops)
 enddef
-
