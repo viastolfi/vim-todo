@@ -4,7 +4,7 @@ command! -nargs=* Todo call Todo(<f-args>)
 
 def Todo(...dirs: list<string>)
   if empty(dirs)
-    execure 'silent grep --binary-files=without-macth -r TODO .'
+    execute 'silent grep --binary-files=without-macth -r TODO .'
   else
     var pattern = 'TODO'
     var targets = join(dirs, ' ')
