@@ -1,5 +1,11 @@
-command Min :call Min(7, 4)
+command! Todo call Todo()
 
-def Min(num1: number, num2: number)
-  :echo num1 < num2 ? num1 : num2
+def Todo()
+  silent grep -r TODO .
+  if len(getqflist()) > 0
+    copen
+  else
+    echo "No TODOs found."
+  endif
 enddef
+
